@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,9 +35,61 @@ class MyApp extends StatelessWidget {
                 return Center(child: Text(snapshot.error.toString()));
               } else {
                 if (snapshot.hasData) {
-                  return const Scaffold(
-                    body: Center(
-                      child: Text('Home Page'),
+                  return Scaffold(
+                    appBar: AppBar(
+                      title: const Text('Firebase'),
+                    ),
+                    floatingActionButton: FloatingActionButton(
+                      isExtended: true,
+                      child: const Icon(Icons.add_alert),
+                      onPressed: () =>
+                          FirebaseFirestore.instance.collection('testing').add(
+                        {
+                          'Timestamp': Timestamp.fromDate(
+                            DateTime.now(),
+                          ),
+                        },
+                      ),
+                    ),
+                    body: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('testing')
+                          .snapshots(),
+                      builder: (
+                        context,
+                        AsyncSnapshot<QuerySnapshot> snapshot,
+                      ) {
+                        if (!snapshot.hasData) {
+                          return const CircularProgressIndicator();
+                        }
+                        return ListView.builder(
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (context, index) {
+                            final data = snapshot.data!.docs[index];
+                            final _dateTime =
+                                (data['Timestamp'] as Timestamp).toDate();
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 10.0,
+                                horizontal: 5.0,
+                              ),
+                              child: ListTile(
+                                selectedTileColor:
+                                    Colors.purpleAccent.withOpacity(0.3),
+                                isThreeLine: false,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  side: const BorderSide(
+                                      color: Colors.black, width: 2.0),
+                                ),
+                                title: Text(
+                                  _dateTime.toString(),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
                     ),
                   );
                 } else {
