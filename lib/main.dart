@@ -4,13 +4,18 @@ import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
+// This is one way to do it but we prefer FutureBuilder
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp();
+//   runApp(const MyApp());
+// }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+  MyApp({Key? key}) : super(key: key);
+  final Future<FirebaseApp> _firebaseApp = Firebase.initializeApp();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -18,14 +23,27 @@ class MyApp extends StatelessWidget {
       value: SystemUiOverlayStyle.dark,
       child: MaterialApp(
         title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.deepPurple,
         ),
-        home: const Scaffold(
-          body: Center(
-            child: Text('page 1'),
-          ),
-        ),
+        home: FutureBuilder(
+            future: _firebaseApp,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(child: Text(snapshot.error.toString()));
+              } else {
+                if (snapshot.hasData) {
+                  return const Scaffold(
+                    body: Center(
+                      child: Text('Home Page'),
+                    ),
+                  );
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              }
+            }),
       ),
     );
   }
