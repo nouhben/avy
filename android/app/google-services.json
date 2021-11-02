@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "754821961819",
+    "project_id": "my-avatar-3ef89",
+    "storage_bucket": "my-avatar-3ef89.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754821961819:android:81a64908ea7558a8e4477e",
+        "android_client_info": {
+          "package_name": "com.nouhben.avy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754821961819-2koj6nhsr2advckc48suqgp9sr10on78.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcq0TsACHaN6WZYynbJpHO97n1WnjRtog"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754821961819-2koj6nhsr2advckc48suqgp9sr10on78.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "754821961819-jub71a68eallt54g64hb62ndjl8df8g7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nouhben.myAvatar"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
