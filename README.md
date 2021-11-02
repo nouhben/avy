@@ -15,3 +15,13 @@ For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 # avy
+
+## In case of problems with pod install or xcode build:
+- flutter clean
+- delete /ios/Pods
+- delete /ios/Podfile.lock
+- flutter pub get
+- from inside ios folder: pod install Run
+
+for more details please check: 
+- [Flutter: CocoaPods's specs repository is too out-of-date to satisfy dependencies](https://stackoverflow.com/questions/64443888/flutter-cocoapodss-specs-repository-is-too-out-of-date-to-satisfy-dependencies/64474526#64474526)

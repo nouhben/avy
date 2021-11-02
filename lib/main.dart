@@ -6,13 +6,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
+
 // This is one way to do it but we prefer FutureBuilder
 // void main() async {
 //   WidgetsFlutterBinding.ensureInitialized();
 //   await Firebase.initializeApp();
 //   runApp(const MyApp());
 // }
-
+//
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
   final Future<FirebaseApp> _firebaseApp = Firebase.initializeApp();
@@ -40,7 +41,11 @@ class MyApp extends StatelessWidget {
                     ),
                   );
                 } else {
-                  return const CircularProgressIndicator();
+                  return const Scaffold(
+                    body: CircularProgressIndicator(
+                      backgroundColor: Colors.black,
+                    ),
+                  );
                 }
               }
             }),
