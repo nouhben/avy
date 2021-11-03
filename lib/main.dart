@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
                   return const Scaffold(
                     body: CircularProgressIndicator(
                       backgroundColor: Colors.black,
+                      strokeWidth: 3.0,
                     ),
                   );
                 }
