@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:avy/models/custom_timestamp.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -7,13 +12,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
+
 // This is one way to do it but we prefer FutureBuilder
 // void main() async {
 //   WidgetsFlutterBinding.ensureInitialized();
 //   await Firebase.initializeApp();
 //   runApp(const MyApp());
 // }
-
+//
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
   final Future<FirebaseApp> _firebaseApp = Firebase.initializeApp();
@@ -32,71 +38,93 @@ class MyApp extends StatelessWidget {
             future: _firebaseApp,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Center(child: Text(snapshot.error.toString()));
+                return Center(
+                  child: Text(
+                    snapshot.error.toString(),
+                  ),
+                );
               } else {
                 if (snapshot.hasData) {
                   return Scaffold(
                     appBar: AppBar(
-                      title: const Text('Firebase'),
+                      title: const Text('emoji'),
                     ),
                     floatingActionButton: FloatingActionButton(
-                      isExtended: true,
-                      child: const Icon(Icons.add_alert),
-                      onPressed: () =>
-                          FirebaseFirestore.instance.collection('testing').add(
-                        {
-                          'Timestamp': Timestamp.fromDate(
-                            DateTime.now(),
-                          ),
-                        },
-                      ),
+                      onPressed: () {
+                        final timeStamp = {
+                          'emoji': emojis[Random().nextInt(emojis.length)],
+                          'timeStamp': Timestamp.fromDate(DateTime.now()),
+                        };
+                        FirebaseFirestore.instance
+                            .collection('custom')
+                            .add(timeStamp);
+                      },
+                      child: const Text('🥦'),
                     ),
                     body: StreamBuilder(
                       stream: FirebaseFirestore.instance
-                          .collection('testing')
+                          .collection('custom')
                           .snapshots(),
                       builder: (
                         context,
-                        AsyncSnapshot<QuerySnapshot> snapshot,
+                        AsyncSnapshot<QuerySnapshot> _snapshot,
                       ) {
-                        if (!snapshot.hasData) {
-                          return const CircularProgressIndicator();
+                        if (!_snapshot.hasData) {
+                          return const Text('No data');
                         }
                         return ListView.builder(
-                          itemCount: snapshot.data!.docs.length,
+                          itemCount: _snapshot.data!.docs.length,
                           itemBuilder: (context, index) {
-                            final data = snapshot.data!.docs[index];
-                            final _dateTime =
-                                (data['Timestamp'] as Timestamp).toDate();
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 10.0,
-                                horizontal: 5.0,
-                              ),
-                              child: ListTile(
-                                selectedTileColor:
-                                    Colors.purpleAccent.withOpacity(0.3),
-                                isThreeLine: false,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                  side: const BorderSide(
-                                      color: Colors.black, width: 2.0),
-                                ),
-                                title: Text(
-                                  _dateTime.toString(),
-                                ),
-                              ),
+                            final CustomTimeStamp _timeStamp =
+                                CustomTimeStamp.fromJson(
+                              {
+                                'emoji': _snapshot.data!.docs[index]['emoji'],
+                                'timeStamp': _snapshot.data!.docs[index]
+                                    ['timeStamp'],
+                              },
                             );
+                            return CustomCard(timeStamp: _timeStamp);
                           },
                         );
                       },
                     ),
                   );
                 } else {
-                  return const CircularProgressIndicator();
+                  return const Scaffold(
+                    body: CircularProgressIndicator(
+                      backgroundColor: Colors.black,
+                    ),
+                  );
                 }
               }
             }),
+      ),
+    );
+  }
+}
+
+class CustomCard extends StatelessWidget {
+  const CustomCard({
+    Key? key,
+    required CustomTimeStamp timeStamp,
+  })  : _timeStamp = timeStamp,
+        super(key: key);
+
+  final CustomTimeStamp _timeStamp;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 3.0,
+      margin: const EdgeInsets.symmetric(
+        vertical: 12.0,
+        horizontal: 6.0,
+      ),
+      child: ListTile(
+        leading: Text(_timeStamp.emoji),
+        title: Text(
+          _timeStamp.timeStamp.toDate().toLocal().toString(),
+        ),
       ),
     );
   }

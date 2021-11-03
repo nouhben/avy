@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
 class CustomTimeStamp {
   // type: String
@@ -25,3 +24,20 @@ class CustomTimeStamp {
     return {'emoji': emoji, 'timeStamp': timeStamp};
   }
 }
+
+final samples = [
+  CustomTimeStamp(emoji: '🚀', timeStamp: Timestamp.fromDate(DateTime.now())),
+];
+
+final List<String> emojis = [
+  '🚀',
+  '🥦',
+  '😍',
+  '🥑',
+  '😎',
+  '💻',
+  '🍔',
+  '🙅‍♂️',
+  '🙄',
+  '🔥',
+];
