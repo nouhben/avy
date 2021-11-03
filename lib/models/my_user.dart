@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 @immutable
-class User {
+class MyUser {
   final String uid;
-  const User({
+  const MyUser({
     required this.uid,
   });
 }
