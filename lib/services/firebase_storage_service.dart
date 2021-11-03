@@ -1,11 +1,16 @@
 import 'dart:io';
 
+import 'package:avy/models/firestore_path.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
 
 class FirebaseStorageService {
-  Future<void> uploadAvatar(
-      {required String uid, required XFile image}) async {}
+  Future<void> uploadAvatar({required String uid, required File file}) async =>
+      await upload(
+        path: FirestorePath.avatar(uid: uid) + '/avatar.png',
+        uid: uid,
+        contentType: 'image/png',
+        file: file,
+      );
 
   /// Generic file upload for any [path] and [contentType]
   Future<String> upload({
