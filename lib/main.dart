@@ -1,7 +1,9 @@
-import 'package:avy/screens/auth/authentication_screen.dart';
+import 'package:avy/screens/auth/signin_screen.dart';
+import 'package:avy/services/firebase_auth_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,30 +25,33 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.deepPurple,
-        ),
-        home: FutureBuilder(
-            future: _firebaseApp,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Center(child: Text(snapshot.error.toString()));
-              } else {
-                if (snapshot.hasData) {
-                  return const SignInScreen();
+      child: Provider<FirebaseAuthService>(
+        create: (_) => FirebaseAuthService(),
+        child: MaterialApp(
+          title: 'Flutter Provider Demo',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.deepPurple,
+          ),
+          home: FutureBuilder(
+              future: _firebaseApp,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Center(child: Text(snapshot.error.toString()));
                 } else {
-                  return const Scaffold(
-                    body: CircularProgressIndicator(
-                      backgroundColor: Colors.black,
-                      strokeWidth: 3.0,
-                    ),
-                  );
+                  if (snapshot.hasData) {
+                    return const SignInScreen();
+                  } else {
+                    return const Scaffold(
+                      body: CircularProgressIndicator(
+                        backgroundColor: Colors.black,
+                        strokeWidth: 3.0,
+                      ),
+                    );
+                  }
                 }
-              }
-            }),
+              }),
+        ),
       ),
     );
   }
