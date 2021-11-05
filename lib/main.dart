@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import 'screens/auth/auth_widget.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
@@ -37,10 +39,12 @@ class MyApp extends StatelessWidget {
               future: _firebaseApp,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  return Center(child: Text(snapshot.error.toString()));
+                  return Center(
+                    child: Text(snapshot.error.toString()),
+                  );
                 } else {
                   if (snapshot.hasData) {
-                    return const SignInScreen();
+                    return const AuthWidget();
                   } else {
                     return const Scaffold(
                       body: CircularProgressIndicator(

@@ -1,13 +1,16 @@
 import 'package:avy/screens/about/about_screen.dart';
+import 'package:avy/services/firebase_auth_service.dart';
 import 'package:avy/widgets/avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   Future<void> _signOut(BuildContext context) async {
     try {
-      //TODO: implement
+      final auth = Provider.of<FirebaseAuthService>(context, listen: false);
+      await auth.signOut();
     } catch (e) {
       print(e);
     }
@@ -57,7 +60,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(130.0),
+          preferredSize: const Size.fromHeight(130.0),
           child: Column(
             children: [
               Avatar(
