@@ -1,3 +1,4 @@
+import 'package:avy/screens/auth/authentication_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,11 +36,7 @@ class MyApp extends StatelessWidget {
                 return Center(child: Text(snapshot.error.toString()));
               } else {
                 if (snapshot.hasData) {
-                  return const Scaffold(
-                    body: Center(
-                      child: Text('Home Page'),
-                    ),
-                  );
+                  return const SignInScreen();
                 } else {
                   return const Scaffold(
                     body: CircularProgressIndicator(
