@@ -49,7 +49,7 @@ class HomeScreen extends StatelessWidget {
           context,
           listen: false,
         );
-        firestore.setAvatarReference(
+        await firestore.setAvatarReference(
           uid: user.uid,
           reference: AvatarReference(downloadURL: downloadUrl),
         );
