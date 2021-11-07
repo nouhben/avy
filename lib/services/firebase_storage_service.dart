@@ -4,7 +4,8 @@ import 'package:avy/models/firestore_path.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseStorageService {
-  Future<void> uploadAvatar({required String uid, required File file}) async =>
+  Future<String> uploadAvatar(
+          {required String uid, required File file}) async =>
       await upload(
         path: FirestorePath.avatar(uid: uid) + '/avatar.png',
         uid: uid,

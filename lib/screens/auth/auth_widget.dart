@@ -1,3 +1,4 @@
+import 'package:avy/models/my_user.dart';
 import 'package:avy/screens/auth/signin_screen.dart';
 import 'package:avy/screens/home/home_screen.dart';
 import 'package:avy/services/firebase_auth_service.dart';
@@ -18,12 +19,18 @@ class AuthWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final _authService =
         Provider.of<FirebaseAuthService>(context, listen: false);
-    return StreamBuilder(
+    return StreamBuilder<MyUser?>(
       stream: _authService.onAuthStateChanged,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           final _user = snapshot.data;
-          return _user == null ? const SignInScreen() : const HomeScreen();
+          return _user == null
+              ? const SignInScreen()
+              : Provider<MyUser>.value(
+                  value: _user,
+                  child: const HomeScreen(),
+                );
+          // This will make the user available to all descendant widgets of the home page
         }
         return const Scaffold(
           body: Center(child: CircularProgressIndicator()),

@@ -18,4 +18,6 @@ class FirebaseAuthService {
     final result = await _firebaseAuth.signInAnonymously();
     return _userFromFirebaseUser(result.user);
   }
+
+  MyUser? get currentUser => _userFromFirebaseUser(_firebaseAuth.currentUser);
 }

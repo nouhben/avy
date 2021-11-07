@@ -1,5 +1,5 @@
 class AvatarReference {
-  final String downloadURL;
+  final String? downloadURL;
   AvatarReference({
     required this.downloadURL,
   });

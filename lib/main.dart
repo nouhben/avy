@@ -1,5 +1,7 @@
-import 'package:avy/screens/auth/signin_screen.dart';
 import 'package:avy/services/firebase_auth_service.dart';
+import 'package:avy/services/firebase_storage_service.dart';
+import 'package:avy/services/firestore_service.dart';
+import 'package:avy/services/image_picker_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,8 +29,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
-      child: Provider<FirebaseAuthService>(
-        create: (_) => FirebaseAuthService(),
+      child: MultiProvider(
+        providers: [
+          Provider<FirebaseAuthService>(create: (_) => FirebaseAuthService()),
+          Provider<ImagePickerService>(create: (_) => ImagePickerService()),
+          Provider<FirebaseStorageService>(
+            create: (_) => FirebaseStorageService(),
+          ),
+          Provider<FirestoreService>(create: (_) => FirestoreService()),
+        ],
         child: MaterialApp(
           title: 'Flutter Provider Demo',
           debugShowCheckedModeBanner: false,
@@ -36,25 +45,18 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.deepPurple,
           ),
           home: FutureBuilder(
-              future: _firebaseApp,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text(snapshot.error.toString()),
-                  );
-                } else {
-                  if (snapshot.hasData) {
-                    return const AuthWidget();
-                  } else {
-                    return const Scaffold(
+            future: _firebaseApp,
+            builder: (context, snapshot) {
+              return (snapshot.hasError || !snapshot.hasData)
+                  ? const Scaffold(
                       body: CircularProgressIndicator(
                         backgroundColor: Colors.black,
                         strokeWidth: 3.0,
                       ),
-                    );
-                  }
-                }
-              }),
+                    )
+                  : const AuthWidget();
+            },
+          ),
         ),
       ),
     );
