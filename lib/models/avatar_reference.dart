@@ -8,7 +8,7 @@ class AvatarReference {
     if (_downloadUrl != null) {
       return AvatarReference(downloadURL: _downloadUrl);
     }
-    return AvatarReference(downloadURL: 'downloadURL');
+    return AvatarReference(downloadURL: null);
   }
-  Map<String, dynamic> toMap() => {'downloadURL': downloadURL};
+  Map<String, dynamic> toMap() => {'downloadUrl': downloadURL};
 }

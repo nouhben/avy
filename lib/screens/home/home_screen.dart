@@ -56,7 +56,7 @@ class HomeScreen extends StatelessWidget {
       }
 
       // 4. (optional) delete local file as no longer needed
-      await image!.delete();
+      //await image!.delete();
     } catch (e) {
       print(e);
     }
@@ -97,13 +97,14 @@ class HomeScreen extends StatelessWidget {
           preferredSize: const Size.fromHeight(130.0),
           child: Column(
             children: [
-              Avatar(
-                radius: 50,
-                borderColor: Colors.black54,
-                borderWidth: 2.0,
-                onPress: () => _chooseAvatar(context),
-                photoURL: null,
-              ),
+              // Avatar(
+              //   radius: 50,
+              //   borderColor: Colors.black54,
+              //   borderWidth: 2.0,
+              //   onPress: () => _chooseAvatar(context),
+              //   photoURL: null,
+              // ),
+              _buildUserInfo(context: context),
               const SizedBox(height: 16),
             ],
           ),
@@ -113,7 +114,46 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildUserInfo({required BuildContext context}) {
-    final fireStore = Provider.of<FirestoreService>(context, listen: false);
+    final fireStore = Provider.of<FirestoreService>(context, listen: true);
+    final user = Provider.of<MyUser>(context, listen: false);
+    return StreamBuilder<AvatarReference>(
+      stream: fireStore.avatarReferenceStream(uid: user.uid),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final AvatarReference ref = (snapshot.data as AvatarReference);
+          print('download url: ${ref.downloadURL}');
+          return Avatar(
+            radius: 50,
+            borderColor: Colors.black54,
+            borderWidth: 2.0,
+            onPress: () => _chooseAvatar(context),
+            photoURL: ref.downloadURL,
+          );
+        }
+        return const SizedBox.shrink();
+      },
+    );
+  }
+}
+
+class AvatarWidget extends StatefulWidget {
+  const AvatarWidget({Key? key}) : super(key: key);
+
+  @override
+  _AvatarWidgetState createState() => _AvatarWidgetState();
+}
+
+class _AvatarWidgetState extends State<AvatarWidget> {
+  late FirestoreService fireStore;
+  bool _isLoading = false;
+  @override
+  void initState() {
+    fireStore = Provider.of<FirestoreService>(context, listen: false);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final user = Provider.of<MyUser>(context, listen: false);
     return StreamBuilder<AvatarReference>(
       stream: fireStore.avatarReferenceStream(uid: user.uid),
@@ -125,7 +165,14 @@ class HomeScreen extends StatelessWidget {
             radius: 50,
             borderColor: Colors.black54,
             borderWidth: 2.0,
-            onPress: () => _chooseAvatar(context),
+            onPress: _isLoading
+                ? null
+                : () {
+                    print('loading a new avatar');
+                    setState(() {
+                      _isLoading = !_isLoading;
+                    });
+                  },
             photoURL: ref.downloadURL,
           );
         }
