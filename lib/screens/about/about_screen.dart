@@ -1,7 +1,8 @@
 import 'package:avy/models/avatar_reference.dart';
+import 'package:avy/screens/home/home_screen.dart';
 import 'package:avy/services/firestore_service.dart';
 import 'package:avy/widgets/avatar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:avy/widgets/avatar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,9 +17,10 @@ class AboutScreen extends StatelessWidget {
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(130.0),
           child: Column(
-            children: <Widget>[
-              _buildUserInfo(context: context),
-              const SizedBox(height: 16),
+            children: const [
+              //_buildUserInfo(context: context),
+              AvatarWidget(),
+              SizedBox(height: 16),
             ],
           ),
         ),

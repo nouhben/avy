@@ -6,6 +6,7 @@ import 'package:avy/services/firebase_storage_service.dart';
 import 'package:avy/services/firestore_service.dart';
 import 'package:avy/services/image_picker_service.dart';
 import 'package:avy/widgets/avatar.dart';
+import 'package:avy/widgets/avatar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -91,7 +92,7 @@ class HomeScreen extends StatelessWidget {
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(130.0),
           child: Column(
-            children: [
+            children: const [
               // Avatar(
               //   radius: 50,
               //   borderColor: Colors.black54,
@@ -99,8 +100,9 @@ class HomeScreen extends StatelessWidget {
               //   onPress: () => _chooseAvatar(context),
               //   photoURL: null,
               // ),
-              _buildUserInfo(context: context),
-              const SizedBox(height: 16),
+              //_buildUserInfo(context: context),
+              AvatarWidget(),
+              SizedBox(height: 16),
             ],
           ),
         ),
@@ -132,52 +134,6 @@ class HomeScreen extends StatelessWidget {
           onPress: () => _chooseAvatar(context),
           photoURL: null,
         );
-      },
-    );
-  }
-}
-
-class AvatarWidget extends StatefulWidget {
-  const AvatarWidget({Key? key}) : super(key: key);
-
-  @override
-  _AvatarWidgetState createState() => _AvatarWidgetState();
-}
-
-class _AvatarWidgetState extends State<AvatarWidget> {
-  late FirestoreService fireStore;
-  bool _isLoading = false;
-  @override
-  void initState() {
-    fireStore = Provider.of<FirestoreService>(context, listen: false);
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    //final user = Provider.of<MyUser>(context, listen: false);
-    return StreamBuilder<AvatarReference>(
-      stream: fireStore.avatarReferenceStream(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final AvatarReference ref = (snapshot.data as AvatarReference);
-
-          return Avatar(
-            radius: 50,
-            borderColor: Colors.black54,
-            borderWidth: 2.0,
-            onPress: _isLoading
-                ? null
-                : () {
-                    print('loading a new avatar');
-                    setState(() {
-                      _isLoading = !_isLoading;
-                    });
-                  },
-            photoURL: ref.downloadURL,
-          );
-        }
-        return const SizedBox.shrink();
       },
     );
   }
