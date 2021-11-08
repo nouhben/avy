@@ -1,6 +1,5 @@
 import 'package:avy/services/firebase_auth_service.dart';
-import 'package:avy/services/firebase_storage_service.dart';
-import 'package:avy/services/firestore_service.dart';
+
 import 'package:avy/services/image_picker_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -33,10 +32,6 @@ class MyApp extends StatelessWidget {
         providers: [
           Provider<FirebaseAuthService>(create: (_) => FirebaseAuthService()),
           Provider<ImagePickerService>(create: (_) => ImagePickerService()),
-          Provider<FirebaseStorageService>(
-            create: (_) => FirebaseStorageService(),
-          ),
-          Provider<FirestoreService>(create: (_) => FirestoreService()),
         ],
         child: MaterialApp(
           title: 'Flutter Provider Demo',

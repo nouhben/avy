@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:avy/models/avatar_reference.dart';
-import 'package:avy/models/firestore_path.dart';
-import 'package:avy/models/my_user.dart';
+
 import 'package:avy/screens/about/about_screen.dart';
 import 'package:avy/services/firebase_auth_service.dart';
 import 'package:avy/services/firebase_storage_service.dart';
@@ -37,12 +34,11 @@ class HomeScreen extends StatelessWidget {
           listen: false,
         );
         // final auth = Provider.of<FirebaseAuthService>(context, listen: false);
-        final user = Provider.of<MyUser>(
-          context,
-          listen: false,
-        ); //auth.currentUser;
+        // final user = Provider.of<MyUser>(
+        //   context,
+        //   listen: false,
+        // ); //auth.currentUser;
         final downloadUrl = await storage.uploadAvatar(
-          uid: user.uid,
           file: image,
         );
         final firestore = Provider.of<FirestoreService>(
@@ -50,7 +46,6 @@ class HomeScreen extends StatelessWidget {
           listen: false,
         );
         await firestore.setAvatarReference(
-          uid: user.uid,
           reference: AvatarReference(downloadURL: downloadUrl),
         );
       }
@@ -115,9 +110,9 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildUserInfo({required BuildContext context}) {
     final fireStore = Provider.of<FirestoreService>(context, listen: true);
-    final user = Provider.of<MyUser>(context, listen: false);
+    //final user = Provider.of<MyUser>(context, listen: false);
     return StreamBuilder<AvatarReference>(
-      stream: fireStore.avatarReferenceStream(uid: user.uid),
+      stream: fireStore.avatarReferenceStream(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final AvatarReference ref = (snapshot.data as AvatarReference);
@@ -154,9 +149,9 @@ class _AvatarWidgetState extends State<AvatarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<MyUser>(context, listen: false);
+    //final user = Provider.of<MyUser>(context, listen: false);
     return StreamBuilder<AvatarReference>(
-      stream: fireStore.avatarReferenceStream(uid: user.uid),
+      stream: fireStore.avatarReferenceStream(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final AvatarReference ref = (snapshot.data as AvatarReference);
