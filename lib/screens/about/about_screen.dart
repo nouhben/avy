@@ -13,15 +13,15 @@ class AboutScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('About'),
-        // bottom: PreferredSize(
-        //   preferredSize: Size.fromHeight(130.0),
-        //   child: Column(
-        //     children: <Widget>[
-        //       _buildUserInfo(context: context),
-        //       SizedBox(height: 16),
-        //     ],
-        //   ),
-        // ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(130.0),
+          child: Column(
+            children: <Widget>[
+              _buildUserInfo(context: context),
+              const SizedBox(height: 16),
+            ],
+          ),
+        ),
       ),
       body: Center(
         child: Column(

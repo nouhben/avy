@@ -116,7 +116,7 @@ class HomeScreen extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final AvatarReference ref = (snapshot.data as AvatarReference);
-          print('download url: ${ref.downloadURL}');
+          //print('download url: ${ref.downloadURL}');
           return Avatar(
             radius: 50,
             borderColor: Colors.black54,
@@ -125,7 +125,13 @@ class HomeScreen extends StatelessWidget {
             photoURL: ref.downloadURL,
           );
         }
-        return const SizedBox.shrink();
+        return Avatar(
+          radius: 50,
+          borderColor: Colors.black54,
+          borderWidth: 2.0,
+          onPress: () => _chooseAvatar(context),
+          photoURL: null,
+        );
       },
     );
   }

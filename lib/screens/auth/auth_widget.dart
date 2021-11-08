@@ -1,11 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:avy/models/my_user.dart';
 import 'package:avy/screens/auth/signin_screen.dart';
 import 'package:avy/screens/home/home_screen.dart';
-import 'package:avy/services/firebase_auth_service.dart';
-import 'package:avy/services/firebase_storage_service.dart';
-import 'package:avy/services/firestore_service.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 /// This widget is needed to display whether the sign_in screen
 /// or the home screen depending on the auth state
@@ -13,39 +11,23 @@ import 'package:provider/provider.dart';
 /// and not to register the widget as a listener
 /// then we use a streamBuilder to automatically change the ui when the status of
 /// auth changes
-
+/// ******
+/// Builds the signed-in or non signed-in UI, depending on the user snapshot.
+/// This widget should be below the [MaterialApp].
+/// An [AuthWidgetBuilder] ancestor is required for this widget to work.
+///
+/// Buy since we are here doesn't this means we already have a valid user?
 class AuthWidget extends StatelessWidget {
-  const AuthWidget({Key? key}) : super(key: key);
-
+  const AuthWidget({Key? key, required this.userSnapshot}) : super(key: key);
+  final AsyncSnapshot<MyUser?> userSnapshot;
   @override
   Widget build(BuildContext context) {
-    final _authService =
-        Provider.of<FirebaseAuthService>(context, listen: false);
-    return StreamBuilder<MyUser?>(
-      stream: _authService.onAuthStateChanged,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.active) {
-          final _user = snapshot.data;
-          return _user == null
-              ? const SignInScreen()
-              : MultiProvider(
-                  providers: [
-                    Provider<MyUser>.value(value: _user),
-                    Provider<FirebaseStorageService>(
-                      create: (_) => FirebaseStorageService(uid: _user.uid),
-                    ),
-                    Provider<FirestoreService>(
-                      create: (_) => FirestoreService(uid: _user.uid),
-                    ),
-                  ],
-                  child: const HomeScreen(),
-                );
-          // This will make the user available to all descendant widgets of the home page
-        }
-        return const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        );
-      },
+    print('AuthWidget build');
+    if (userSnapshot.connectionState == ConnectionState.active) {
+      return userSnapshot.hasData ? const HomeScreen() : const SignInScreen();
+    }
+    return const Scaffold(
+      body: Center(child: CircularProgressIndicator()),
     );
   }
 }
