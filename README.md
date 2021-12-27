@@ -25,3 +25,7 @@ samples, guidance on mobile development, and a full API reference.
 
 for more details please check: 
 - [Flutter: CocoaPods's specs repository is too out-of-date to satisfy dependencies](https://stackoverflow.com/questions/64443888/flutter-cocoapodss-specs-repository-is-too-out-of-date-to-satisfy-dependencies/64474526#64474526)
+
+- In Flutter pod install should not called manually. To run pod install
+execute the following commands flutter clean, flutter pub get and
+flutter build ios.
