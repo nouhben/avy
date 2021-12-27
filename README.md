@@ -28,6 +28,6 @@ for more details please check:
 
 - In Flutter pod install should not called manually. To run pod install
 execute the following commands:
--- flutter clean
--- flutter pub get
--- flutter build ios.
+- flutter clean
+- flutter pub get
+- flutter build ios.
